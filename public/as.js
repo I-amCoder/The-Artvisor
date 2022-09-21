@@ -1,0 +1,1 @@
+<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{},"__N_SSP":true},"page":"/","query":{},"buildId":"r1pduY1VR3kNJDgSbcRgt","isFallback":false,"gssp":true,"scriptLoader":[]}</script>
