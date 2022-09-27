@@ -77,6 +77,7 @@ class HomeController extends Controller
 
     public function artwork(Request $request, $artwork)
     {
+        abort(404);
         dd($artwork);
     }
 
@@ -99,8 +100,9 @@ class HomeController extends Controller
 
     public function getData($url)
     {
+        $apiurl = config('app.api_url');
         $client = new Client;
-        $response = $client->get('http://127.0.0.1:8001?url=' . $url);
+        $response = $client->get($apiurl . '?url=' . $url);
         $response = json_decode($response->getBody(), true);
         return $response;
     }

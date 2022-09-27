@@ -53,8 +53,16 @@ return [
     | your application so that it is used when running Artisan tasks.
     |
     */
+    /*
+    |--------------------------------------------------------------------------
+    | API URL
+    |--------------------------------------------------------------------------
+    |   Url of the api for scraping art.co which is in
+    |   Django project
+    |
+    */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'api_url' => env('127.0.0.1:8001'),
 
     'asset_url' => env('ASSET_URL'),
 
