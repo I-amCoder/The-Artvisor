@@ -11402,9 +11402,10 @@ footer.footer {
 }
 .artwork-img{
     width: 70%;
+    height: auto;
 }
 .artwork-details{
-    border: 1px solid #e5e7eb;
+    border: 1px solid #ddd;
     padding: 0 4rem;
     border-radius: 24px;
 }
@@ -11423,6 +11424,10 @@ footer.footer {
 .img-sm-square{
     width: 50px;
     height: 60px;
+}
+.img-rounded-sm{
+    width: 30px;
+    border-radius: 50%;
 }
 /* .nav-tabs{
     overflow-x: auto;

@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-Route::get('artist/{artist}', [HomeController::class, 'artist'])->name('artist');
-Route::view('artwork/{artwork}', 'artwork')->name('artwork');
+Route::get('artists/{artist}', [HomeController::class, 'artist'])->name('artist');
+Route::get('artworks/{artwork}', [HomeController::class, 'artwork'])->name('artwork');

@@ -154,15 +154,18 @@
                                 </th>
                                 <th>{{ $item['latest_event']['seller']['artist']['full_name'] }}</th>
                                 <th>
-                                    {{-- @if (isset($item['latest_price']) && $item['latest_price']['is_for_sale']) --}}
-                                    @if ($item['latest_event']['latest_price']['status'] == 'for_sale')
-                                        <span class="badge badge-success">FOR SALE</span>
-                                    @else
-                                        <span class="badge badge-danger">NOT FOR SALE</span>
-                                    @endif
+                                    <a target="_blank" href="{{ $item['latest_event']['url'] }}">
+                                        {{-- @if (isset($item['latest_price']) && $item['latest_price']['is_for_sale']) --}}
+                                        @if ($item['latest_event']['latest_price']['status'] == 'for_sale')
+                                            <span class="badge badge-success">FOR SALE</span>
+                                        @else
+                                            <span class="badge badge-danger">NOT FOR SALE</span>
+                                        @endif
+                                    </a>
                                 </th>
                                 {{-- <th></th> --}}
                             </tr>
+
                         @empty
                         @endforelse
                     </tbody>

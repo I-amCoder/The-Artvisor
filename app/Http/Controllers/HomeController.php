@@ -77,8 +77,16 @@ class HomeController extends Controller
 
     public function artwork(Request $request, $artwork)
     {
-        abort(404);
-        dd($artwork);
+
+        $query = $request->input();
+        $url = $this->queryMaker($query, 'artworks/' . $artwork);
+        $response = $this->getData($url);
+        $artwork = $response['props']['pageProps']['artworks'][$artwork];
+        $historical_data = $response['props']['pageProps']['eventsResponse']['items'];
+        $similiar_arts =  $response['props']['pageProps']['similarArtworks']['items'];
+        $artist = $artwork['artists'][0];
+
+        return view('artwork', compact('artwork', 'artist', 'historical_data', 'similiar_arts'));
     }
 
     public function queryMaker($params, $page = null)

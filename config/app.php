@@ -62,7 +62,7 @@ return [
     |
     */
 
-    'api_url' => env('127.0.0.1:8001'),
+    'api_url' => '127.0.0.1:8001',
 
     'asset_url' => env('ASSET_URL'),
 
