@@ -143,7 +143,7 @@
                                         src="{{ isset($item['media']) ? $item['media'][0]['url'] : asset('assets/img/artist.png') }}"
                                         alt="url">
                                 </th>
-                                <th>{{ $item['inception_date']['raw'] }}</th>
+                                <th>{{ isset($item['inception_date']) ? $item['inception_date']['raw'] : '-' }}</th>
                                 <th>{{ $item['titles'][0]['value'] }}</th>
                                 <th>{{ isset($item['latest_price']) ? $item['latest_price']['formatted']['target'] : 'Undisclosed' }}
                                 </th>
@@ -152,7 +152,8 @@
                                     <?php $date = $item['latest_event']['last_update_date']; ?>
                                     {{ $months[intval(Str::between($date, '-', '-')) - 1] . ' - ' . explode('-', $date, 2)[0] }}
                                 </th>
-                                <th>{{ $item['latest_event']['seller']['artist']['full_name'] }}</th>
+                                <th>{{ isset($item['latest_event']['seller']['gallery']) ? $item['latest_event']['seller']['gallery']['name'] : $item['latest_event']['seller']['artist']['full_name'] }}
+                                </th>
                                 <th>
                                     <a target="_blank" href="{{ $item['latest_event']['url'] }}">
                                         {{-- @if (isset($item['latest_price']) && $item['latest_price']['is_for_sale']) --}}
