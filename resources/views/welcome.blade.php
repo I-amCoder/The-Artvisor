@@ -1,12 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    {{-- <!-- Navigation-->
-    <nav class="navbar navbar-light bg-light static-top">
-        <div class="container py-2">
-            <a class="navbar-brand " href="#!">The Artvisor</a>
-
-        </div>
-    </nav> --}}
     <!-- Masthead-->
     <header class="masthead">
         <div class="container position-relative">
@@ -43,8 +36,10 @@
                         {{-- <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div> --}}
                         <h3>Artists</h3>
                         {{-- <p class="">10000</p> --}}
-                        <span class="badge mt-2 badge-pill px-3 py-2 badge-success"
-                            style="font-size: 24px">{{ $frontPageData['artists'] }}</span>
+                        <span id="artists" class="badge mt-2 badge-pill px-3 py-2 badge-success loading "
+                            style="font-size: 24px">
+
+                        </span>
 
                     </div>
                 </div>
@@ -52,24 +47,30 @@
                     <div class="features-icons-item  mx-auto mb-5 mb-lg-0 mb-lg-3">
                         {{-- <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div> --}}
                         <h3>Artworks</h3>
-                        <span class="badge mt-2 badge-pill px-3 py-2 badge-success"
-                            style="font-size: 24px">{{ $frontPageData['artworks'] }}</span>
+                        <span id="artworks" class="badge mt-2 badge-pill px-3 py-2 badge-success loading"
+                            style="font-size: 24px">
+
+                        </span>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="features-icons-item  mx-auto mb-5 mb-lg-3">
                         {{-- <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div> --}}
                         <h3>Art Dealer Prices</h3>
-                        <span class="badge mt-2 badge-pill px-3 py-2 badge-success"
-                            style="font-size: 24px">{{ $frontPageData['art_dealer_prices'] }}</span>
+                        <span id="art_dealer_prices" class="badge mt-2 badge-pill px-3 py-2 badge-success loading "
+                            style="font-size: 24px">
+
+                        </span>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="features-icons-item  mx-auto mb-0 mb-lg-3">
                         {{-- <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div> --}}
                         <h3>Auction House Prices</h3>
-                        <span class="badge mt-2 badge-pill px-3 py-2 badge-success"
-                            style="font-size: 24px">{{ $frontPageData['auction_houses_prices'] }}</span>`
+                        <span id="auction_houses_prices" class="badge mt-2 badge-pill px-3 py-2 badge-success loading"
+                            style="font-size: 24px">
+
+                        </span>
                     </div>
                 </div>
             </div>
@@ -110,5 +111,30 @@
     </footer>
     <!-- Bootstrap core JS-->
     <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
 @endsection
+@push('js')
+    <script src="js/scripts.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            fetchData();
+        })
+
+        function fetchData() {
+            fetch('http://127.0.0.1:8000/home_counters')
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    $('#artists').text(result.artists);
+                    $('#artists').removeClass('loading');
+                    $('#artworks').text(result.artworks);
+                    $('#artworks').removeClass('loading');
+                    $('#art_dealer_prices').text(result.art_dealer_prices);
+                    $('#art_dealer_prices').removeClass('loading');
+                    $('#auction_houses_prices').text(result.auction_houses_prices);
+                    $('#auction_houses_prices').removeClass('loading');
+                })
+                .catch((error) => console.log("error", error));
+        }
+    </script>
+@endpush

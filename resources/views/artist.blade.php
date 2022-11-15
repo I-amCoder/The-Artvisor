@@ -1,9 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    @php
-
-    @endphp
-
     @include('layouts.navbar')
     <div class="row profile-section mx-5 mt-4">
         <div class="col-md-5 py-4 ">
@@ -14,7 +10,29 @@
                 <div class="col-6">
                     <div class="ml-2">
                         <div class="h4 text-secondary">Artist</div>
-                        <div class="h2">{{ $artist['name'] }}</div>
+                        <div class="h3">{{ $artist['name'] }}</div>
+                        <a target="_blank" href="{{ $social['external'] }}" class="social-link">
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                        </a>
+                        @if (isset($social['www.facebook.com']))
+                            <a class="social-link" target="_blank"
+                                href="//www.facebook.com/{{ $social['www.facebook.com'][0] }}  ">
+                                <i class=" ml-2 fab fa-facebook" aria-hidden="true"></i>
+                            </a>
+                        @endif
+
+                        @if (isset($social['www.pinterest.com']))
+                            <a class="social-link" target="_blank"
+                                href="//www.pinterest.com/{{ $social['www.pinterest.com'][0] }}  ">
+                                <i class="text-danger ml-2 fab fa-pinterest" aria-hidden="true"></i>
+                            </a>
+                        @endif
+
+                        @if (isset($social['twitter.com']))
+                            <a class="social-link" target="_blank" href="//twitter.com/{{ $social['twitter.com'][0] }}  ">
+                                <i class=" ml-2 fab fa-twitter" aria-hidden="true"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -25,10 +43,17 @@
                 @if ($artist['type'] == 'emerging')
                     <p>{{ $artist['name'] }} is an emerging contemporary artist.</p>
                 @endif
-                <p>ARTWORKS SOLD IN MAJOR AUCTION HOUSES
-                    {{ $artist['total_auction_houses'] > 0 ? $artist['total_auction_houses'] : 'No' }}</p>
-                {{-- <p>News Presence </p> --}}
+                <p>ARTWORKS SOLD IN MAJOR AUCTION HOUSES: <b>
+                        {{ $artist['total_auction_houses'] > 0 ? $artist['total_auction_houses'] : 'NO' }} </b></p>
+                <p>News Presence:
+                    @for ($i = 0; $i < 5; $i++)
+                        <i style="color: {{ $i < $artist['news_presence'] ? 'orange' : '#ddd' }}"
+                            class="text-sm  fa fa-star" aria-hidden="true"></i>
+                    @endfor
+                </p>
+
                 <p>Total artworks: {{ $artist['total_artworks'] }}</p>
+                <p>Currently For Sale: {{ $artist['total_artworks_for_sale'] }}</p>
             </div>
         </div>
     </div>
@@ -155,12 +180,15 @@
                                 <th>{{ isset($item['latest_event']['seller']['gallery']) ? $item['latest_event']['seller']['gallery']['name'] : $item['latest_event']['seller']['artist']['full_name'] }}
                                 </th>
                                 <th>
-                                    <a target="_blank" href="{{ $item['latest_event']['url'] }}">
+                                    <a href="{{ url('artworks/' . $item['slug'] . '?query=' . request('query')) }}">
                                         {{-- @if (isset($item['latest_price']) && $item['latest_price']['is_for_sale']) --}}
                                         @if ($item['latest_event']['latest_price']['status'] == 'for_sale')
                                             <span class="badge badge-success">FOR SALE</span>
                                         @else
-                                            <span class="badge badge-danger">NOT FOR SALE</span>
+                                            <a
+                                                href="{{ url('artworks/' . $item['slug'] . '?query=' . request('query')) }}">
+                                                <span class="badge badge-danger">NOT FOR SALE</span>
+                                            </a>
                                         @endif
                                     </a>
                                 </th>
@@ -182,13 +210,20 @@
                 <ul class="pagination">
                     <li class="page-item {{ is_null($pagination['previous']) ? 'disabled' : '' }}">
                         <a class="page-link"
-                            href="{{ route('artist', [Request::segment(2), 'query' => request('query'), 'artworks_cursor' => $pagination['previous']]) }}"
-                            tabindex="-1">Previous</a>
+                            @php $array = request()->all();
+                        array_unshift($array, request()->segment(2));
+
+                        $array['artworks_cursor'] = $pagination['previous']; @endphp
+                            href="{{ route('artist', $array) }}" tabindex="-1">Previous</a>
                     </li>
                     @forelse ($pagination['previous_pages'] as $page)
                         <li class="page-item ">
                             <a class="page-link "
-                                href="{{ route('artist', [Request::segment(2), 'query' => request('query'), 'artworks_cursor' => $page['cursor']]) }}">{{ $page['page'] }}</a>
+                                @php $array = request()->all();
+                                    array_unshift($array, request()->segment(2));
+
+                                    $array['artworks_cursor'] = $pagination['next']; @endphp
+                                href="{{ route('artist', $array) }}">{{ $page['page'] }}</a>
                         </li>
                     @empty
                     @endforelse
@@ -198,13 +233,23 @@
                     @forelse ($pagination['next_pages'] as $page)
                         <li class="page-item ">
                             <a class="page-link"
-                                href="{{ route('artist', [Request::segment(2), 'query' => request('query'), 'artworks_cursor' => $page['cursor']]) }}">{{ $page['page'] }}</a>
+                                @php $array = request()->all();
+                                    array_unshift($array, request()->segment(2));
+
+                                    $array['artworks_cursor'] = $page['cursor']; @endphp
+                                href="{{ route('artist', $array) }}">{{ $page['page'] }}</a>
                         </li>
                     @empty
                     @endforelse
                     <li class="page-item {{ is_null($pagination['next']) ?? 'disabled' }}">
+
+
                         <a class="page-link"
-                            href="{{ route('artist', [Request::segment(2), 'query' => request('query'), 'artworks_cursor' => $pagination['next']]) }}">Next</a>
+                            @php $array = request()->all();
+                                    array_unshift($array, request()->segment(2));
+
+                                    $array['artworks_cursor'] = $pagination['next']; @endphp
+                            href="{{ route('artist', $array) }}">Next</a>
                     </li>
                 </ul>
             </nav>

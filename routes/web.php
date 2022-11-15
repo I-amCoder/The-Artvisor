@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/home_counters', [HomeController::class, 'homeCounters']);
 Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('api/search', [HomeController::class, 'searchApi'])->name('searchApi');
 
 Route::get('artists/{artist}', [HomeController::class, 'artist'])->name('artist');
 Route::get('artworks/{artwork}', [HomeController::class, 'artwork'])->name('artwork');

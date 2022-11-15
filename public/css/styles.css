@@ -11438,3 +11438,33 @@ footer.footer {
     display: inline-block;
     float: none;
 } */
+.social-link{
+    text-decoration: none;
+}
+.social-link:hover{
+    text-decoration: none;
+}
+.loading {
+    animation: skeleton-loading 1s linear infinite alternate;
+    width: 100px;
+    height: 1.5rem;
+
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(200, 20%, 80%);
+    }
+
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
+
+/* .sketlon-text {
+    width: 300px !important;
+
+    height: 3rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+} */

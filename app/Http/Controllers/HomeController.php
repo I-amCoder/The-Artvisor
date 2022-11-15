@@ -15,16 +15,14 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-
-        $base_url = ('https://art.co');
-
-
-        $response = $this->getData($base_url);
-
-        // dd($response);
-        $frontPageData = $response['props']['pageProps']['homeCounters'];
-
-        return view('welcome', compact('frontPageData'));
+        return view('welcome');
+    }
+    public function homeCounters()
+    {
+        $url = "https://art.co";
+        $response = $this->getData($url);
+        $home_counters = $response['props']['pageProps']['homeCounters'];
+        return response()->json($home_counters, 200,);
     }
 
     public function search(Request $request)
@@ -34,6 +32,31 @@ class HomeController extends Controller
         // $response = json_decode($response->getBody(), true);
 
         // Make Query Url for art.co
+        // $url = $this->queryMaker($request->input(), 'search');
+
+        // // Get api from artvisor Api
+        // $response = $this->getData($url);
+
+
+        // // Manipulate with response
+        // $data = ($response['props']['pageProps']['searchResponseAndEntity']['response']);
+        // $currentData = $response['props']['pageProps']['searchAndEntityParams'];
+        // $pagination = $data['cursors'];
+        // $items = $data['items'];
+        // $namespaces = $response['props']['namespaces']['common'];
+        // $typeData = $response['props']['pageProps']['typesCountsResponse']['aggregations']['_index'];
+        // $types = $response['props']['pageProps']['typesCountsQuery']['types'];
+
+
+        // return view('result', compact('pagination', 'namespaces', 'typeData', 'items', 'currentData'));
+        $query = $request->input();
+        return view('result', compact('query'));
+    }
+
+    public function searchApi(Request $request)
+    {
+
+
         $url = $this->queryMaker($request->input(), 'search');
 
         // Get api from artvisor Api
@@ -48,9 +71,7 @@ class HomeController extends Controller
         $namespaces = $response['props']['namespaces']['common'];
         $typeData = $response['props']['pageProps']['typesCountsResponse']['aggregations']['_index'];
         $types = $response['props']['pageProps']['typesCountsQuery']['types'];
-
-
-        return view('result', compact('pagination', 'namespaces', 'typeData', 'items', 'currentData'));
+        return response()->json([$pagination, $namespaces, $typeData, $items, $currentData], 200);
     }
 
     public function artist(Request $request, $slug)
@@ -62,8 +83,12 @@ class HomeController extends Controller
 
         $image = $response['props']['pageProps']['artists'][$slug]['media'][0]['url'];
         $artist = $response['props']['pageProps']['artistProfile'];
+
         $artworks = $response['props']['pageProps']['artworks']['items'];
         $pagination = $response['props']['pageProps']['artworks']['cursors'];
+        $social = $response['props']['pageProps']['artists'][$slug]['ids'];
+        $social['external'] = $response['props']['pageProps']['artists'][$slug]['external_urls'][0];
+
         // dd($pagination);
         // $size = $response['props']['pageProps']['entities'];
         $filters = $response['props']['pageProps']['artworksFilters'];
@@ -71,7 +96,7 @@ class HomeController extends Controller
         $months = [
             'Jan', 'Feb', 'Mar', 'April', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         ];
-        return view('artist', compact('artist', 'image', 'artworks', 'months', 'pagination', 'filters'));
+        return view('artist', compact('artist', 'image', 'artworks', 'months', 'pagination', 'filters', 'social'));
     }
 
     public function artwork(Request $request, $artwork)

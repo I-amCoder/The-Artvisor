@@ -68,19 +68,26 @@
                                         src="{{ isset($item['original_artwork']['media']) ? $item['original_artwork']['media'][0]['url'] : asset('assets/img/artist.png') }}"
                                         alt="img">
                                 </th>
-                                <td>{{ $item['latest_price']['formatted']['target'] }}</td>
+                                <td>{{ isset($item['prices_history']) && isset($item['prices_history'][0]['formatted']['original']) ? $item['prices_history'][0]['formatted']['original'] : $item['latest_price']['formatted']['original'] }}
+                                </td>
                                 <td>{{ isset($item['seller']['gallery']) ? $item['seller']['gallery']['name'] : '' }}
                                     <br>
                                     <small>On
                                         {{ preg_replace('(^https?://www.)', '', $item['seller']['platform']['official_website']) }}</small>
                                 </td>
                                 <td>
-                                    @if ($item['latest_price']['status'] == 'for_sale')
-                                        <a target="_blank" href="{{ $item['url'] }}"><span class="badge badge-success">For
-                                                Sale</span></a>
-                                    @else
-                                        <span class="badge badge-danger">Not for sale</span>
-                                    @endif
+                                    <a
+                                        href="{{ url('artworks/' . $item['artwork']['slug'] . '?query=' . request('query')) }}">
+                                        {{-- @if (isset($item['latest_price']) && $item['latest_price']['is_for_sale']) --}}
+                                        @if (isset($item['latest_event']) && $item['latest_event']['latest_price']['status'] == 'for_sale')
+                                            <span class="badge badge-success">FOR SALE</span>
+                                        @else
+                                            <a
+                                                href="{{ url('artworks/' . $item['artwork']['slug'] . '?query=' . request('query')) }}">
+                                                <span class="badge badge-danger">NOT FOR SALE</span>
+                                            </a>
+                                        @endif
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -112,16 +119,18 @@
                                 <td>{{ $item['inception_date']['raw'] }}</td>
                                 <td>{{ $item['titles'][0]['value'] }}</td>
                                 <td>{{ isset($item['latest_price']) ? $item['latest_price']['formatted']['original'] : 'Undisclosed/not given' }}
+
                                 </td>
                                 <td>{{ isset($item['seller']['gallery']) ? $item['seller']['gallery']['name'] : $item['latest_event']['seller']['artist']['full_name'] }}
                                 </td>
                                 <td>
                                     @if (isset($item['latest_price']) && $item['latest_price']['status'] == 'for_sale')
-                                        <a target="_blank" href="{{ $item['latest_event']['url'] }}"><span
+                                        <a href="{{ url('artworks/' . $item['slug'] . '?query=' . request('query')) }}"><span
                                                 class="badge badge-success">For
                                                 Sale</span></a>
                                     @else
-                                        <span class="badge badge-danger">Not for sale</span>
+                                        <a href="{{ url('artworks/' . $item['slug'] . '?query=' . request('query')) }}"><span
+                                                class="badge badge-danger">Not for sale</span></a>
                                     @endif
                                 </td>
                             </tr>
